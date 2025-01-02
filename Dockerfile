@@ -11,4 +11,5 @@ EXPOSE 8501
 
 
 # Run Streamlit
+CMD ["cd","src"]
 CMD ["streamlit", "run", "Home.py"]
