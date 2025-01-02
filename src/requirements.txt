@@ -3,3 +3,6 @@ pandas
 matplotlib
 seaborn
 streamlit-authenticator
+google
+google-auth
+google-api-python-client
