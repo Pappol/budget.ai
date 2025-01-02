@@ -11,4 +11,4 @@ EXPOSE 8501
 
 
 # Run Streamlit
-CMD ["streamlit", "run", "Home.py", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "Home.py"]
