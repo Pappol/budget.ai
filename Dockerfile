@@ -1,10 +1,11 @@
 FROM python:3.11
 
 # Set the working directory
-WORKDIR /src
+WORKDIR src
 
-COPY . /src
+COPY . src
 # install requirements
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 # Expose the port Streamlit runs on
 EXPOSE 8501
