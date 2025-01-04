@@ -5,7 +5,7 @@ WORKDIR /src
 
 COPY . /src
 # install requirements
-RUN pip install -r src/requirements.txt
+RUN pip install -r requirements.txt
 # Expose the port Streamlit runs on
 EXPOSE 8501
 
