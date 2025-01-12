@@ -1,22 +1,7 @@
 import streamlit as st
 import pandas as pd
-import os
-import matplotlib.pyplot as plt
-
-
-def preprocess_data(df) -> pd.DataFrame:
-    df['mese'] = pd.Categorical(
-        df['mese'],
-        categories=[
-            'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
-            'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
-        ],
-        ordered=True
-    )
-    # convert importo to float
-    df['importo'] = df['importo'].str.replace(',', '.').astype(float)
-    return df
-
+from src.utils.plot_utils import pie_plot, display_metrics
+from src.utils.data_utils import preprocess_data
 
 # App Layout
 st.title("Personal Budget Dashboard")
@@ -29,25 +14,7 @@ if uploaded_file:
 
     data = preprocess_data(data)
 
-    # Display the metrics of the current month
-    current_month = data['mese'].max()
-    current_month_data = data.query('mese == @current_month')
-
-    # Separate income and expenses
-    total_expense = current_month_data.query('categoria != "Stipendio"')['importo'].sum()
-    total_income = current_month_data.query('categoria == "Stipendio"')['importo'].sum()
-
-    # Filter data for past months
-    past_months_data = data.query('mese != @current_month')
-
-    # Calculate past expenses and income
-    mean_expense = past_months_data.query('categoria != "Stipendio"')['importo'].mean()
-    mean_income = past_months_data.query('categoria == "Stipendio"')['importo'].mean()
-
-    # split into two columns
-    col1, col2 = st.columns(2)
-    col1.metric("Total Expense", f"{total_expense:.2f} €", delta=f"{total_expense - mean_expense:.2f} €")
-    col2.metric("Total Income", f"{total_income:.2f} €", delta=f"{total_income - mean_income:.2f} €")
+    display_metrics(data)
 
     # Filters
     st.sidebar.header("Filters")
@@ -71,14 +38,13 @@ if uploaded_file:
 
     # Visualizations
     st.header("Your Personal Budget Dashboard")
-
-    st.subheader("Expenses")
     # Exclude 'Stipendio' category
     expenses = filtered_data[filtered_data['categoria'] != 'Stipendio']
 
     st.subheader(f"Total Expense by Category in {', '.join(selected_months)}")
-    st.bar_chart(expenses.groupby('categoria')['importo'].sum())
-
+    grouped_expenses = expenses.groupby('categoria')['importo'].sum()
+    # Create a pie chart
+    pie_plot(grouped_expenses)
     # Total Expense by Month
     st.subheader("Total Expense by Month")
 
