@@ -26,6 +26,15 @@ def display_metrics(data: pd.DataFrame):
     col2.metric("Total Income", f"{total_income:.2f} €", delta=f"{total_income - mean_income:.2f} €")
     col3.metric("Savings", f"{total_income - total_expense:.2f} €", delta=f"{mean_savings:.2f} €")
 
+    # display as metric the numer of transactions in expenses
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Transactions", current_month_data.query('categoria != "Stipendio"').shape[0])
+    # display as metric the numer of transactions in income
+    col2.metric("Total Income Transactions", current_month_data.query('categoria == "Stipendio"').shape[0])
+
+
+
+
 
 def pie_plot(grouped_expenses: pd.DataFrame):
     bg_color = "#0E1117"
