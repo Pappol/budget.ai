@@ -29,6 +29,26 @@ if uploaded_file:
 
     data = preprocess_data(data)
 
+    # Display the metrics of the current month
+    current_month = data['mese'].max()
+    current_month_data = data.query('mese == @current_month')
+
+    # Separate income and expenses
+    total_expense = current_month_data.query('categoria != "Stipendio"')['importo'].sum()
+    total_income = current_month_data.query('categoria == "Stipendio"')['importo'].sum()
+
+    # Filter data for past months
+    past_months_data = data.query('mese != @current_month')
+
+    # Calculate past expenses and income
+    mean_expense = past_months_data.query('categoria != "Stipendio"')['importo'].mean()
+    mean_income = past_months_data.query('categoria == "Stipendio"')['importo'].mean()
+
+    # split into two columns
+    col1, col2 = st.columns(2)
+    col1.metric("Total Expense", f"{total_expense:.2f} €", delta=f"{total_expense - mean_expense:.2f} €")
+    col2.metric("Total Income", f"{total_income:.2f} €", delta=f"{total_income - mean_income:.2f} €")
+
     # Filters
     st.sidebar.header("Filters")
     selected_months = st.sidebar.multiselect(
