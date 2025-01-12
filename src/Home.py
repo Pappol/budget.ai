@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-from src.utils.plot_utils import pie_plot, display_metrics
-from src.utils.data_utils import preprocess_data
+from utils.plot_utils import pie_plot, display_metrics
+from utils.data_utils import preprocess_data
 
 # App Layout
 st.title("Personal Budget Dashboard")
